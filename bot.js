@@ -10,7 +10,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const SHOP_PROMPT = `
 Ти продавець магазина 'Мой Магазин'.
-Спілкуйся українською, дружньо, на 'ти', коротко.
+Спілкуйся українською, дружньо, на 'ти', дуже коротко (1-2 речення).
 ЦІЛЬ: прийняти замовлення. Збери:
 1. Товар і кількість
 2. ПІБ клієнта
@@ -18,16 +18,21 @@ const SHOP_PROMPT = `
 4. Місто + відділення Нової Пошти
 `;
 
-// Обробка прямих текстових повідомлень від користувачів боту
 bot.on("message:text", async (ctx) => {
   try {
+    // 1. Відправляємо статус "друкує...", щоб користувач бачив активність
+    await ctx.replyWithChatAction("typing");
+
     const userMessage = ctx.message.text;
 
-    // Запит до Gemini API
+    // 2. Обмеження maxOutputTokens прискорює генерацію в 2-3 рази
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",
       contents: userMessage,
-      config: { systemInstruction: SHOP_PROMPT },
+      config: { 
+        systemInstruction: SHOP_PROMPT,
+        maxOutputTokens: 150 
+      },
     });
 
     if (response.text) {
@@ -38,12 +43,10 @@ bot.on("message:text", async (ctx) => {
   }
 });
 
-// Глобальний обробник помилок (щоб бот не вимикався при збоях)
 bot.catch((err) => {
   console.error("Помилка в роботі бота:", err.error);
 });
 
-// Запуск HTTP-сервера для Render
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
