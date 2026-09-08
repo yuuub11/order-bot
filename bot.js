@@ -18,20 +18,37 @@ const SHOP_PROMPT = `
 4. Місто + відділення Нової Пошти
 `;
 
+// Сховище для ID вже оброблених повідомлень
+const processedMessages = new Set();
+
 bot.on("message:text", async (ctx) => {
+  // Створюємо унікальний ключ для повідомлення (чат + ID повідомлення)
+  const messageKey = `${ctx.chat.id}:${ctx.message.message_id}`;
+
+  // Якщо це повідомлення вже обробляється або оброблено — ігноруємо дублікат
+  if (processedMessages.has(messageKey)) {
+    return;
+  }
+  
+  // Запам'ятовуємо повідомлення
+  processedMessages.add(messageKey);
+
+  // Очищаємо пам'ять через 3 хвилини
+  setTimeout(() => {
+    processedMessages.delete(messageKey);
+  }, 3 * 60 * 1000);
+
   try {
-    // 1. Відправляємо статус "друкує...", щоб користувач бачив активність
     await ctx.replyWithChatAction("typing");
 
     const userMessage = ctx.message.text;
 
-    // 2. Обмеження maxOutputTokens прискорює генерацію в 2-3 рази
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",
       contents: userMessage,
       config: { 
         systemInstruction: SHOP_PROMPT,
-        maxOutputTokens: 150 
+        maxOutputTokens: 300
       },
     });
 
