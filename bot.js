@@ -25,7 +25,7 @@ bot.on("message:text", async (ctx) => {
 
     // Запит до Gemini API
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.6-flash",
       contents: userMessage,
       config: { systemInstruction: SHOP_PROMPT },
     });
