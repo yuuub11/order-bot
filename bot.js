@@ -1,7 +1,7 @@
 import { Bot } from "grammy";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
-import http from "http"; // Встроенный модуль Node.js
+import http from "http";
 
 dotenv.config();
 
@@ -18,13 +18,12 @@ const SHOP_PROMPT = `
 4. Місто + відділення Нової Пошти
 `;
 
-bot.on("business_message", async (ctx) => {
-  if (ctx.from.id === ctx.businessConnection.user.id) return;
-
-  const userMessage = ctx.businessMessage.text;
-  if (!userMessage) return;
-
+// Обробка прямих текстових повідомлень від користувачів боту
+bot.on("message:text", async (ctx) => {
   try {
+    const userMessage = ctx.message.text;
+
+    // Запит до Gemini API
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: userMessage,
@@ -35,17 +34,22 @@ bot.on("business_message", async (ctx) => {
       await ctx.reply(response.text);
     }
   } catch (error) {
-    console.error("Помилка Gemini API:", error);
+    console.error("Помилка при обробці повідомлення:", error);
   }
 });
 
-// Запуск простейшего HTTP-сервера для Render
+// Глобальний обробник помилок (щоб бот не вимикався при збоях)
+bot.catch((err) => {
+  console.error("Помилка в роботі бота:", err.error);
+});
+
+// Запуск HTTP-сервера для Render
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
   res.end("Bot is running!");
 }).listen(PORT, () => {
-  console.log(`HTTP-сервер запущен на порту ${PORT}`);
+  console.log(`HTTP-сервер запущено на порту ${PORT}`);
 });
 
 bot.start();
