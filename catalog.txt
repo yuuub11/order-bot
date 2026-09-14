@@ -1,0 +1,38 @@
+[
+  {
+    "id": "air_force_1",
+    "name": "Nike Air Force 1 Low White",
+    "price": 2200,
+    "sizes": ["40", "41", "42", "43", "44"],
+    "inStock": true,
+    "description": "Класичні білі форси. Натуральна зносостійка шкіра, прошита підошва, топ-якість 1:1.",
+    "ownerPhotos": [],
+    "officialPhotos": [
+      "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+FORCE+1+%2707.png"
+    ]
+  },
+  {
+    "id": "jordan_1",
+    "name": "Nike Air Jordan 1 Retro High",
+    "price": 2600,
+    "sizes": ["41", "42", "43"],
+    "inStock": true,
+    "description": "Легендарний високий силует, преміум шкіра, класичні кольори.",
+    "ownerPhotos": [],
+    "officialPhotos": [
+      "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/01f01c89-a292-4299-8ee3-8f060ae05bc7/AIR+JORDAN+1+RETRO+HIGH+OG.png"
+    ]
+  },
+  {
+    "id": "nb_530",
+    "name": "New Balance 530 Silver",
+    "price": 2400,
+    "sizes": ["38", "39", "40", "41"],
+    "inStock": true,
+    "description": "Дихаюча сітка, легка амортизуюча підошва Abzorb. Ідеальні на кожен день.",
+    "ownerPhotos": [],
+    "officialPhotos": [
+      "https://nb.scene7.com/is/image/NB/mr530sg_nb_02_i"
+    ]
+  }
+]
